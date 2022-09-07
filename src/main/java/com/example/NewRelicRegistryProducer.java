@@ -20,20 +20,15 @@ public class NewRelicRegistryProducer {
     @Alternative
     @Priority(Interceptor.Priority.APPLICATION + 100)
     public NewRelicRegistry registry() {
-        String new_relic_license_key = System.getenv("NEW_RELIC_LICENSE_KEY");
+        String new_relic_license_key = System.getenv("NEW_RELIC_API_KEY");
         if (new_relic_license_key == null || new_relic_license_key.isBlank()) {
-            log.warn("NEW_RELIC_LICENSE_KEY is not set, so New Relic metrics will not be sent.");
+            log.warn("NEW_RELIC_API_KEY is not set, so New Relic metrics will not be sent.");
             return null;
         }
         return NewRelicRegistry.builder(new NewRelicRegistryConfig() {
                     @Override
                     public String get(String key) {
-                        {
-                            if (key.equals("newrelic.step")) {
-                                System.out.println("key " + key);
-
-                            }
-                        }
+                        log.info("NewRelic registry config being read: key %s".formatted(key));
                         return switch (key) {
                             case "newrelic.apiKey" -> new_relic_license_key;
                             case "newrelic.uri" -> "https://metric-api.eu.newrelic.com/metric/v1";
@@ -49,7 +44,7 @@ public class NewRelicRegistryProducer {
 
                     @Override
                     public boolean enableAuditMode() {
-                        return true;
+                        return false;
                     }
                 })
                 .commonAttributes(new Attributes()
