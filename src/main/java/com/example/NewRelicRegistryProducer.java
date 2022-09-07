@@ -15,10 +15,6 @@ import javax.interceptor.Interceptor;
 public class NewRelicRegistryProducer {
     private static Logger log = Logger.getLogger(NewRelicRegistryProducer.class);
 
-    /**
-     * This producer is added as a bean by the Processor IFF the default registry
-     * instance has been enabled.
-     */
     @Produces
     @Singleton
     @Alternative
